@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,10 +17,10 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "9.6"
+          gradle-version: "9.7.1"
 
       - name: Build APK
         run: gradle assembleDebug --no-daemon
