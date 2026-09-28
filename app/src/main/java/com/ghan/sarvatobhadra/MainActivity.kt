@@ -3,9 +3,12 @@ package com.ghan.sarvatobhadra
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.net.Uri
 import android.os.Bundle
 import android.webkit.GeolocationPermissions
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.app.ActivityCompat
@@ -47,10 +50,21 @@ class MainActivity : Activity() {
         }
 
         webView.webViewClient = object : WebViewClient() {
+
+            override fun shouldInterceptRequest(
+                view: WebView,
+                request: WebResourceRequest
+            ): WebResourceResponse? {
+                return assetLoader.shouldInterceptRequest(request.url)
+            }
+
+            @Deprecated("Deprecated in Java")
             override fun shouldInterceptRequest(
                 view: WebView,
                 url: String
-            ) = assetLoader.shouldInterceptRequest(url)
+            ): WebResourceResponse? {
+                return assetLoader.shouldInterceptRequest(Uri.parse(url))
+            }
         }
 
         webView.webChromeClient = object : WebChromeClient() {
@@ -70,6 +84,7 @@ class MainActivity : Activity() {
         setContentView(webView)
     }
 
+    @Suppress("DEPRECATION")
     override fun onBackPressed() {
         if (webView.canGoBack()) {
             webView.goBack()
